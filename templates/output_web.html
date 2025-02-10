@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        #background-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .result-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        .specs-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .spec-label {
+            color: #4CAF50;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .predicted-price {
+            text-align: center;
+            background: rgba(76, 175, 80, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .table-container {
+            margin-top: 30px;
+            height: 300px; /* Set a fixed height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .laptop-link {
+            color: #4CAF50;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .laptop-link:hover {
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .action-button {
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .primary-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .price-column {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+        .top-nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          padding: 15px;
+          z-index: 1000;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .nav-links {
+          display: flex;
+          gap: 20px;
+          margin-left: 20px;
+      }
+
+      .nav-links a {
+          color: white;
+          text-decoration: none;
+          padding: 8px 15px;
+          border-radius: 4px;
+          transition: all 0.3s;
+      }
+
+      .nav-links a:hover {
+          background: rgba(255, 255, 255, 0.1);
+      }
+
+      .profile-link {
+          margin-right: 20px;
+          margin-top: 8px;
+      }
+
+      .profile-link a {
+          color: #4CAF50;
+          text-decoration: none;
+          padding: 8px 15px;
+          border: 1px solid #4CAF50;
+          border-radius: 4px;
+          transition: all 0.3s;
+      }
+
+      .profile-link a:hover {
+          background: #4CAF50;
+          color: white;
+      }
+
+      .content {
+          margin-top: 60px;
+      }
+    </style>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.5/build/spline-viewer.js"></script>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#projects">Projects</a>
+            <a href="/#about">About</a>
+            <a href="/#contact">Contact</a>
+            <a href="/form">New Prediction</a>
+        </div>
+        <div class="profile-link">
+            <a href="https://github.com/yourusername" target="_blank">My Profile</a>
+        </div>
+    </nav>
+    <spline-viewer id="background-scene" url="https://prod.spline.design/YpB-yqLMWbXZ1-AI/scene.splinecode"></spline-viewer>
+
+    <div class="result-container">
+        <div class="specs-summary">
+            <div class="spec-item">
+                <div class="spec-label">RAM</div>
+                <div>{{ ram }} GB</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Storage</div>
+                <div>{{ memory }} GB</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Screen Size</div>
+                <div>{{ size }}"</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">GPU Type</div>
+                <div>{{ gpu_type }}</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">CPU Type</div>
+                <div>{{ cpu_type }}</div>
+            </div>
+        </div>
+
+        <div class="predicted-price">
+            <div class="spec-label">Predicted Price</div>
+            <div style="font-size: 1.5em; font-weight: bold;">{{ output }} VND</div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th style="text-align: right;">Actual Price (VND)</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for laptop in similar_laptops %}
+                    <tr>
+                        <td>{{ laptop.Name }}</td>
+                        <td class="price-column">{{ "{:,.0f}".format(laptop.Price) }}</td>
+                        <td>
+                            {% if laptop.Link %}
+                            <a href="{{ laptop.Link }}" target="_blank" class="laptop-link">View Details</a>
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="button-group">
+            <a href="/form" class="action-button primary-button">New Prediction</a>
+            <a href="/" class="action-button secondary-button">Home</a>
+        </div>
+    </div>
+</body>
+</html>
