@@ -32,7 +32,7 @@ class LabelEncoderTransformer(BaseEstimator, TransformerMixin):
 app = Flask(__name__)
 
 # Load dataset
-df = pd.read_excel(r"D:\Project\Build-a-website-to-predict-laptop-prices\Data\Laptops_dataset.xlsx")
+df = pd.read_excel(r"D:\Project\Build-a-website-to-predict-laptop-prices\Laptops_dataset.xlsx")
 
 # Extract unique values
 unique_values = {
@@ -44,8 +44,8 @@ unique_values = {
 }
 
 # Load model and preprocessor
-model = joblib.load(r"D:\Project\Build-a-website-to-predict-laptop-prices\Code\best_model.pkl")
-preprocessor = joblib.load(r"D:\Project\Build-a-website-to-predict-laptop-prices\Code\preprocessor.pkl")
+model = joblib.load(r"D:\Project\Build-a-website-to-predict-laptop-prices\best_model.pkl")
+preprocessor = joblib.load(r"D:\Project\Build-a-website-to-predict-laptop-prices\preprocessor.pkl")
 
 @app.route('/')
 def index():
@@ -131,91 +131,3 @@ def api_predict():
 if __name__ == "__main__":
     app.run(debug=True)
 
-# from flask import Flask, request, jsonify, render_template
-# import pandas as pd
-# import numpy as np
-# import joblib
-
-# app = Flask(__name__)
-
-# # Load dataset
-# df = pd.read_excel(r"E:\code\Code Python\Chuyên đề AI và DS\Laptop Price Prediction Web main\Laptops_dataset.xlsx")  # Adjust path as needed
-
-# # Extract unique values
-# unique_values = {
-#     'Ram': df['Ram'].unique().tolist(),
-#     'Memory': df['Memory'].unique().tolist(),
-#     'Size': df['Size'].unique().tolist(),
-#     'GPU_type': df['GPU_type'].unique().tolist(),
-#     'CPU_type': df['CPU_type'].unique().tolist()
-# }
-
-# # Load model and preprocessor
-# model = joblib.load(r"E:\code\Code Python\Chuyên đề AI và DS\Laptop Price Prediction Web main\best_model.pkl")
-# preprocessor = joblib.load(r"E:\code\Code Python\Chuyên đề AI và DS\Laptop Price Prediction Web main\preprocessor.pkl")
-
-# @app.route('/')
-# def index():
-#     return render_template('new_web.html')
-
-# @app.route('/form')
-# def form():
-#     return render_template('form_web.html', 
-#                          ram_values=unique_values['Ram'],
-#                          memory_values=unique_values['Memory'],
-#                          size_values=unique_values['Size'],
-#                          gpu_values=unique_values['GPU_type'],
-#                          cpu_values=unique_values['CPU_type'])
-
-# @app.route("/submit_form", methods=['POST'])
-# def prediction():
-#     if request.method == "POST":
-#         try:
-#             # Get form data
-#             input_data = {
-#                 'Ram': int(request.form['ram']),
-#                 'Memory': int(request.form['memory']),
-#                 'Size': float(request.form['size']),
-#                 'GPU_type': request.form['gpu_type'],
-#                 'CPU_type': request.form['cpu_type']
-#             }
-            
-#             # Create DataFrame and process
-#             input_df = pd.DataFrame([input_data])
-#             processed_features = preprocessor.transform(input_df)
-#             prediction = model.predict(processed_features)[0]
-            
-#             return render_template('output_web.html',
-#                                 ram=input_data['Ram'],
-#                                 memory=input_data['Memory'],
-#                                 size=input_data['Size'],
-#                                 gpu_type=input_data['GPU_type'],
-#                                 cpu_type=input_data['CPU_type'],
-#                                 output=prediction)
-        
-#         except Exception as e:
-#             return render_template('error.html', error=str(e))
-
-# @app.route("/api/predict", methods=["POST"])
-# def api_predict():
-#     try:
-#         data = request.get_json()
-#         input_data = {
-#             'Ram': data['ram'],
-#             'Memory': data['memory'],
-#             'Size': data['size'],
-#             'GPU_type': data['gpu_type'],
-#             'CPU_type': data['cpu_type']
-#         }
-        
-#         input_df = pd.DataFrame([input_data])
-#         processed_features = preprocessor.transform(input_df)
-#         prediction = model.predict(processed_features)[0]
-        
-#         return jsonify({"price": float(prediction)})
-    
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 400
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
